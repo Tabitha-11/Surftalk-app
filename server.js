@@ -11,7 +11,6 @@ admin.initializeApp({
 const express= require('express');
 const app=express();
 const cors=require('cors');
-const port=process.env.port || 5000;
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -46,7 +45,7 @@ app.get('/login',async(req,res)=>{
   console.log("mailid : "+docmailid + "password : "+password);
 })
 
-app.listen(port, (err)=>{
+app.listen(process.env.PORT || 5000, (err)=>{
     if(err){
         console.log("Error starting the server..")
     }

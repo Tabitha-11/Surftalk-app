@@ -16,5 +16,13 @@
   "author": "",
   "license": "ISC",
   "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tabitha-11/Surftalk-app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Tabitha-11/Surftalk-app/issues"
+  },
+  "homepage": "https://github.com/Tabitha-11/Surftalk-app#readme",
   "description": ""
 }
