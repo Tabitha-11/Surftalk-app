@@ -1,5 +1,6 @@
 const admin = require('firebase-admin');
-
+const Chat = require('chat-service');
+const socket = require('socket.io-client');
 const bodyParser=require('body-parser');
 const serviceAccount = require('./surfkey.json');
 
@@ -11,6 +12,10 @@ admin.initializeApp({
 const express= require('express');
 const app=express();
 const cors=require('cors');
+const Chat = new Chat ({port},{onConnect})
+process.on('SIGHT', ()=> 
+chatservice.close().finally(()=>
+process.exit()))
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -45,6 +50,45 @@ app.get('/login',async(req,res)=>{
   console.log("mailid : "+docmailid + "password : "+password);
 })
 
+app.get('/login/home', function onConnect(service, id){
+  let { query } = service.transport.getHandshakeData(id)
+  let {userName} = query
+
+  res.Promise.resolve(userName)
+})
+
+//app.get('/login/home', (req,res)=>{
+// chat.hasRoom('default'.then(hasRoom => {
+//   if(!hasRoom){
+//     res.send(chat.addRoom('default',{owner: 'admin'})  
+//   }
+// }))
+
+
+app.post('/login/home/chat', (req,res)=>{
+  let url = 'https://internprojectapp.herokuapp.com/login/home/chat'
+  let userName = 'user'
+  let token = 'token'
+  let query = 'userName'=userName+token==token;
+  let opts = { query}
+  let socket = io.connect(url,opts)
+  socket.on('roomMessage', (room, msg) => {
+    console.log(`${msg.author}: ${msg.textMessage}`)
+  })
+   
+   socket.on('loginConfirmed', userName => {
+    socket.emit('roomJoin', 'default', (error, data) => {
+      
+      if (error) { return }
+      socket.emit('roomMessage', 'default', { textMessage: 'Hello!' })
+    })
+  })
+   
+  socket.on('loginRejected', error => {
+    console.error(error)
+  })
+
+})
 app.listen(process.env.PORT || 5000, (err)=>{
     if(err){
         console.log("Error starting the server..")
